@@ -17,10 +17,11 @@
     "@ethersproject/providers": "^5.7.2",
     "@heroicons/react": "^2.0.11",
     "@pcd/eddsa-ticket-pcd": "^0.3.0",
-    "@pcd/passport-interface": "^0.8.0",
+    "@pcd/passport-interface": "^0.11.0",
     "@pcd/semaphore-identity-pcd": "^0.8.0",
     "@pcd/util": "^0.2.0",
     "@pcd/zk-eddsa-event-ticket-pcd": "^0.2.1",
+    "@pcd/zuauth": "^1.2.0",
     "@rainbow-me/rainbowkit": "1.1.2",
     "@uniswap/sdk-core": "^4.0.1",
     "@uniswap/v2-sdk": "^3.0.1",
@@ -38,7 +39,6 @@
     "usehooks-ts": "^2.7.2",
     "viem": "^1.16.6",
     "wagmi": "1.4.4",
-    "zupass-auth": "^0.0.4",
     "zustand": "^4.1.2"
   },
   "devDependencies": {

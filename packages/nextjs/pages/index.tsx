@@ -1,17 +1,16 @@
 import { useCallback, useState } from "react";
 import { ZKEdDSAEventTicketPCDPackage } from "@pcd/zk-eddsa-event-ticket-pcd";
+import { zuAuthPopup } from "@pcd/zuauth";
 import type { NextPage } from "next";
 import { hexToBigInt } from "viem";
 import { useAccount } from "wagmi";
-import { useZuAuth } from "zupass-auth";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { generateWitness, isETHBerlinPublicKey } from "~~/utils/scaffold-eth/pcd";
-import { ETHBERLIN_VALID_EVENT_IDS } from "~~/utils/zupassConstants";
+import { ETHBERLIN_ZUAUTH_CONFIG } from "~~/utils/zupassConstants";
 
 // Get a valid event id from { supportedEvents } from "zuauth" or https://api.zupass.org/issue/known-ticket-types
-const validEventIds = ETHBERLIN_VALID_EVENT_IDS;
 const fieldsToReveal = {
   revealAttendeeEmail: true,
   revealEventId: true,
@@ -22,16 +21,21 @@ const Home: NextPage = () => {
   const [verifiedFrontend, setVerifiedFrontend] = useState(false);
   const [verifiedBackend, setVerifiedBackend] = useState(false);
   const [verifiedOnChain, setVerifiedOnChain] = useState(false);
-  const { authenticate, pcd } = useZuAuth();
   const { address: connectedAddress } = useAccount();
+  const [pcd, setPcd] = useState<string>();
 
   const getProof = useCallback(async () => {
     if (!connectedAddress) {
       notification.error("Please connect wallet");
       return;
     }
-    authenticate(fieldsToReveal, connectedAddress, validEventIds);
-  }, [authenticate, connectedAddress]);
+    const result = await zuAuthPopup({ fieldsToReveal, watermark: connectedAddress, config: ETHBERLIN_ZUAUTH_CONFIG });
+    if (result.type === "pcd") {
+      setPcd(JSON.parse(result.pcdStr).pcd);
+    } else {
+      notification.error("Failed to parse PCD");
+    }
+  }, [connectedAddress]);
 
   const verifyProofFrontend = async () => {
     if (!pcd) {
