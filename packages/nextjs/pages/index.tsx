@@ -3,15 +3,15 @@ import { ZKEdDSAEventTicketPCDPackage } from "@pcd/zk-eddsa-event-ticket-pcd";
 import type { NextPage } from "next";
 import { hexToBigInt } from "viem";
 import { useAccount } from "wagmi";
-import { isZupassPublicKey, useZuAuth } from "zupass-auth";
+import { useZuAuth } from "zupass-auth";
 import { MetaHeader } from "~~/components/MetaHeader";
 import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
-import { generateWitness } from "~~/utils/scaffold-eth/pcd";
-import { DEVCONNECT_VALID_EVENT_IDS } from "~~/utils/zupassConstants";
+import { generateWitness, isETHBerlinPublicKey } from "~~/utils/scaffold-eth/pcd";
+import { ETHBERLIN_VALID_EVENT_IDS } from "~~/utils/zupassConstants";
 
 // Get a valid event id from { supportedEvents } from "zuauth" or https://api.zupass.org/issue/known-ticket-types
-const validEventIds = DEVCONNECT_VALID_EVENT_IDS;
+const validEventIds = ETHBERLIN_VALID_EVENT_IDS;
 const fieldsToReveal = {
   revealAttendeeEmail: true,
   revealEventId: true,
@@ -50,8 +50,8 @@ const Home: NextPage = () => {
       return;
     }
 
-    if (!isZupassPublicKey(deserializedPCD.claim.signer)) {
-      notification.error(`[ERROR Frontend] PCD is not signed by Zupass`);
+    if (!isETHBerlinPublicKey(deserializedPCD.claim.signer)) {
+      notification.error(`[ERROR Frontend] PCD is not signed by ETHBerlin`);
       return;
     }
 
@@ -126,7 +126,7 @@ const Home: NextPage = () => {
               <a className="link" href="https://github.com/proofcarryingdata/zupass" target="_blank">
                 Zupass
               </a>{" "}
-              to verify PCDs (Proof-Carrying Data). <span className="font-bold">e.g.</span> Devconnect tickets.
+              to verify PCDs (Proof-Carrying Data). <span className="font-bold">e.g.</span> ETHBerlin tickets.
             </p>
             <p className="text-sm m-0">
               - Check
