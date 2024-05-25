@@ -63,15 +63,6 @@ const SponsorDashboard: NextPage = () => {
     ],
   });
 
-  const handleMintNFT = async () => {
-    try {
-      await mintNFT();
-      notification.success("Bounty deposited successfully!");
-    } catch (error) {
-      notification.error("Failed to deposit bounty.");
-    }
-  };
-
   return (
     <>
       <MetaHeader title="Sponsor Dashboard" />
@@ -105,9 +96,6 @@ const SponsorDashboard: NextPage = () => {
               />
               <button className="btn btn-primary w-full" onClick={addBounty}>
                 Add Bounty
-              </button>
-              <button className="btn btn-secondary w-full" onClick={handleMintNFT} disabled={isMintingNFT}>
-                Deposit Bounty
               </button>
             </div>
           </div>

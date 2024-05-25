@@ -16,6 +16,14 @@ contract YourCollectible is ERC721, Groth16Verifier {
 	// This us the ETHBerlin event UUID converted to bigint
 	uint256[1] VALID_EVENT_IDS = [111560146890584288369567824893314450802];
 
+	// Assumption that there is only one event ID for each category and only 1 winner.
+	uint256[1] SOCIAL_WINNER_EVENT_ID = [
+		120712479341476572660709084948370727286
+	];
+	uint256[1] HACKER_WINNER_EVENT_ID = [
+		213102656137810142630059403125621749981
+	];
+
 	// This is hex to bigint conversion for ETHBerlin signer
 	uint256[2] ETHBERLIN_SIGNER = [
 		13908133709081944902758389525983124100292637002438232157513257158004852609027,

@@ -7,7 +7,7 @@ import { MetaHeader } from "~~/components/MetaHeader";
 import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { generateWitness } from "~~/utils/scaffold-eth/pcd";
-import { ETHBERLIN_ZUAUTH_CONFIG } from "~~/utils/zupassConstants";
+import { HACKER_WINNER_ZUAUTH_CONFIG, SOCIAL_WINNER_ZUAUTH_CONFIG } from "~~/utils/zupassConstants";
 
 // Get a valid event id from { supportedEvents } from "zuauth" or https://api.zupass.org/issue/known-ticket-types
 const fieldsToReveal = {
@@ -25,7 +25,11 @@ const HackerDashboard: NextPage = () => {
       notification.error("Please connect wallet");
       return;
     }
-    const result = await zuAuthPopup({ fieldsToReveal, watermark: connectedAddress, config: ETHBERLIN_ZUAUTH_CONFIG });
+    const result = await zuAuthPopup({
+      fieldsToReveal,
+      watermark: connectedAddress,
+      config: SOCIAL_WINNER_ZUAUTH_CONFIG,
+    });
     if (result.type === "pcd") {
       setPcd(JSON.parse(result.pcdStr).pcd);
     } else {
