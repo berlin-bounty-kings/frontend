@@ -5,6 +5,7 @@
 :root,
 [data-theme] {
   background: hsl(var(--b2));
+  background-color: antiquewhite;
 }
 
 body {
@@ -22,11 +23,50 @@ h4 {
 p {
   margin: 1rem 0;
 }
+.navbar {
+  background-color: antiquewhite !important;
+  color: #101114 !important;
+  border-bottom:#101114  !important;
+  box-shadow: none !important;
+}
 
 .btn {
   @apply shadow-md;
+  background-color: #e65b54 !important;
+  color: antiquewhite !important;
+  border-color: #101114 !important;
+}
+.btn:active,.btn:hover {
+  background-color: #e65b54 !important;
+  color: #101114 !important;
+  border-color:  antiquewhite !important;
 }
 
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+button {
+  background-color: #e65b54 !important;
+  color: antiquewhite !important;
+  border-color: #101114 !important;
+}
+button:hover {
+  background-color: #e65b54 !important;
+  color: #101114 !important;
+  border-color:  antiquewhite !important;
+}
+.bg-secondary {
+  background-color: #e65b54 !important;
+}
+.bg-secondary:hover,.bg-secondary:active {
+  background-color: #e65b54 !important;
+}
+.hover:bg-secondary {
+  background-color: #e65b54 !important;
+}
+
+.card .card {
+  background-color: rgb(247, 247, 247) !important;
+}
+
