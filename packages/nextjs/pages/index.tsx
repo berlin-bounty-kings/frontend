@@ -1,120 +1,62 @@
-import { useCallback, useState } from "react";
-import { ZKEdDSAEventTicketPCDPackage } from "@pcd/zk-eddsa-event-ticket-pcd";
-import { zuAuthPopup } from "@pcd/zuauth";
-import type { NextPage } from "next";
-import { hexToBigInt } from "viem";
-import { useAccount } from "wagmi";
-import { MetaHeader } from "~~/components/MetaHeader";
-import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
-import { notification } from "~~/utils/scaffold-eth";
-import { generateWitness, isETHBerlinPublicKey } from "~~/utils/scaffold-eth/pcd";
-import { ETHBERLIN_ZUAUTH_CONFIG } from "~~/utils/zupassConstants";
+"use client";
 
-// Get a valid event id from { supportedEvents } from "zuauth" or https://api.zupass.org/issue/known-ticket-types
-const fieldsToReveal = {
-  revealAttendeeEmail: true,
-  revealEventId: true,
-  revealProductId: true,
-};
+import Link from "next/link";
+import type { NextPage } from "next";
+import { useAccount } from "wagmi";
+import { CreditCardIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import { Address } from "~~/components/scaffold-eth";
 
 const Home: NextPage = () => {
-  const [verifiedFrontend, setVerifiedFrontend] = useState(false);
-  const [verifiedBackend, setVerifiedBackend] = useState(false);
-  const [verifiedOnChain, setVerifiedOnChain] = useState(false);
   const { address: connectedAddress } = useAccount();
-  const [pcd, setPcd] = useState<string>();
-
-  const getProof = useCallback(async () => {
-    if (!connectedAddress) {
-      notification.error("Please connect wallet");
-      return;
-    }
-    const result = await zuAuthPopup({ fieldsToReveal, watermark: connectedAddress, config: ETHBERLIN_ZUAUTH_CONFIG });
-    if (result.type === "pcd") {
-      setPcd(JSON.parse(result.pcdStr).pcd);
-    } else {
-      notification.error("Failed to parse PCD");
-    }
-  }, [connectedAddress]);
-
-  const verifyProofFrontend = async () => {
-    if (!pcd) {
-      notification.error("No PCD found!");
-      return;
-    }
-
-    if (!connectedAddress) {
-      notification.error("Please connect wallet");
-      return;
-    }
-    const deserializedPCD = await ZKEdDSAEventTicketPCDPackage.deserialize(pcd);
-
-    if (!(await ZKEdDSAEventTicketPCDPackage.verify(deserializedPCD))) {
-      notification.error(`[ERROR Frontend] ZK ticket PCD is not valid`);
-      return;
-    }
-
-    if (!isETHBerlinPublicKey(deserializedPCD.claim.signer)) {
-      notification.error(`[ERROR Frontend] PCD is not signed by ETHBerlin`);
-      return;
-    }
-
-    if (deserializedPCD.claim.watermark.toString() !== hexToBigInt(connectedAddress as `0x${string}`).toString()) {
-      notification.error(`[ERROR Frontend] PCD watermark doesn't match`);
-      return;
-    }
-
-    setVerifiedFrontend(true);
-    notification.success(
-      <>
-        <p className="font-bold m-0">Frontend Verified!</p>
-        <p className="m-0">
-          The proof has been verified
-          <br /> by the frontend.
-        </p>
-      </>,
-    );
-  };
-
-  const sendPCDToServer = async () => {
-    let response;
-    try {
-      response = await fetch("/api/verify", {
-        method: "POST",
-        body: JSON.stringify({
-          pcd: pcd,
-          address: connectedAddress,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (e) {
-      notification.error(`Error: ${e}`);
-      return;
-    }
-
-    const data = await response.json();
-    setVerifiedBackend(true);
-    notification.success(
-      <>
-        <p className="font-bold m-0">Backend Verified!</p>
-        <p className="m-0">{data?.message}</p>
-      </>,
-    );
-  };
-
-  // mintItem verifies the proof on-chain and mints an NFT
-  const { writeAsync: mintNFT, isLoading: isMintingNFT } = useScaffoldContractWrite({
-    contractName: "YourCollectible",
-    functionName: "mintItem",
-    // @ts-ignore TODO: fix the type later with readonly fixed length bigInt arrays
-    args: [pcd ? generateWitness(JSON.parse(pcd)) : undefined],
-  });
 
   return (
     <>
-     
+      <div className="flex items-center flex-col flex-grow pt-10">
+        <div className="px-5">
+          <h1 className="text-center">
+            <span className="block text-2xl mb-2">Welcome to</span>
+            <span className="block text-4xl font-bold">SECURE BOUNTY FUND</span>
+          </h1>
+          <div className="flex justify-center items-center space-x-2">
+            <p className="my-2 font-medium">Connected Address:</p>
+            <Address address={connectedAddress} />
+          </div>
+          <p>
+            <img
+              src="/logo/android-chrome-512x512.png"
+              // alt={fighters[0].name}
+              // style={{ height: "200px" }}
+            />
+          </p>
+          <br></br>
+          <p className="text-center text-lg">text!</p>
+        </div>
+
+        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
+          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
+            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
+              <CurrencyDollarIcon className="h-8 w-8 fill-secondary" />
+              <p>
+                Sponsors and organizers can add bounties on the{" "}
+                <Link href="/create" passHref className="link">
+                  Sponsor dashboard
+                </Link>
+                .
+              </p>
+            </div>
+            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
+              <CreditCardIcon className="h-8 w-8 fill-secondary" />
+              <p>
+                Winners can claim their bounties on the{" "}
+                <Link href="/results" passHref className="link">
+                  Hacker dashboard
+                </Link>
+                .
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
