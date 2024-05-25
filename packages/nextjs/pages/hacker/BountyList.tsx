@@ -6,7 +6,6 @@ interface Bounty {
   value: string;
   winner: string;
   sponsor: string;
-  sponsorName?: string;
   isClaimed: boolean;
 }
 
@@ -29,7 +28,6 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, onClaimClick }) 
           value: "1 ETH",
           winner: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
           sponsor: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
-          sponsorName: "Sponsor Name",
           isClaimed: false,
         },
         {

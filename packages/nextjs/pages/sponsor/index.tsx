@@ -1,13 +1,24 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Bounty, SponsorBountyList } from "./BountyList";
+import { BigNumber } from "ethers";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
+import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 const SponsorDashboard: NextPage = () => {
   const { address: connectedAddress } = useAccount();
-  const [newBounty, setNewBounty] = useState<Bounty>({ name: "", description: "", value: "", winner: "" });
+  const [bounties, setBounties] = useState<Bounty[]>([]);
+
+  const [newBounty, setNewBounty] = useState<Bounty>({
+    name: "",
+    description: "",
+    value: "",
+    winner: "",
+    sponsor: "",
+    isClaimed: false,
+  });
 
   const handleApprove = (index: number) => {
     notification.success(`Bounty ${index} approved`);
@@ -34,11 +45,31 @@ const SponsorDashboard: NextPage = () => {
       description: newBounty.description,
       value: newBounty.value,
       winner: "",
+      sponsor: connectedAddress,
+      isClaimed: false,
     };
 
     setBounties([...bounties, newBountyEntry]);
-    setNewBounty({ name: "", description: "", value: "", winner: "" });
+    setNewBounty({ name: "", description: "", value: "", winner: "", sponsor: "", isClaimed: false });
     notification.success("Bounty added successfully!");
+  };
+
+  const { writeAsync: mintNFT, isLoading: isMintingNFT } = useScaffoldContractWrite({
+    contractName: "SBFModule",
+    functionName: "depositBounty",
+    args: [
+      newBounty.name,
+      BigInt(newBounty.value), // TODO: Convert the value to wei
+    ],
+  });
+
+  const handleMintNFT = async () => {
+    try {
+      await mintNFT();
+      notification.success("Bounty deposited successfully!");
+    } catch (error) {
+      notification.error("Failed to deposit bounty.");
+    }
   };
 
   return (
@@ -74,6 +105,9 @@ const SponsorDashboard: NextPage = () => {
               />
               <button className="btn btn-primary w-full" onClick={addBounty}>
                 Add Bounty
+              </button>
+              <button className="btn btn-secondary w-full" onClick={handleMintNFT} disabled={isMintingNFT}>
+                Deposit Bounty
               </button>
             </div>
           </div>

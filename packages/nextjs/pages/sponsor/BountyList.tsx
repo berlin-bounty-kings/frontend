@@ -7,7 +7,6 @@ export interface Bounty {
   value: string;
   winner: string;
   sponsor: string;
-  sponsorName?: string;
   isClaimed: boolean;
 }
 
