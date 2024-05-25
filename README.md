@@ -1,79 +1,62 @@
-# 🏗 ETHBerlin Zupass: SE2 Starter Kit
+<div align="center">
+  <h1 align="center">PROJECT NAME</h1>
+  <h3>Description</h3>
+  
+![logo](logo.png)
+</div>
 
-TLDR: 🎥 [watch the intro video here](https://youtu.be/7SGaMHOYc04)
+💸 Sort summary of project
 
-Get started with [Zupass](https://github.com/proofcarryingdata/zupass) to generate proofs & verify PCDs (Proof-Carrying Data).
+⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
 
-In this Starter Kit you'll find an example of how to generate a proof and verify it on the backend.
-- **Frontend** (check `packages/nextjs/pages/index.tsx`):
-  - Using `zuauth` we generate a popup where you can generate a proof in your Zupass account.
-  - It then sends the PCD to the backend.
-- **Backend** (check `packages/nextjs/pages/api/verify.ts`):
-  - Verifies the proof received from the frontend.
-  - If the proof is valid, it sends 1 ETH to the connected wallet address.
+## Screenshots
 
----
+| Landing Page                                 | Sponsor dashboard                        |
+| -------------------------------------------- | ---------------------------------------- |
+| ![Landing Page](screenshots/landingpage.png) | ![Sponsor page](screenshots/sponsor.png) |
 
-![Workflow](.github/img/workflow.png)
+| Hacker dashboard                       | ??                           |
+| -------------------------------------- | ---------------------------- |
+| ![Hacker page](screenshots/hacker.png) | ![???](screenshots/what.png) |
 
----
+## The problem [PROJECT NAME] solves
 
-### 🏃‍♀️ Quick Start
+## Challenges you ran into
 
-1. Clone the repo
-```bash
-git clone https://github.com/BuidlGuidl/ethberlin-zupass-starterkit
-cd ethberlin-zupass-starterkit
-```
+## Technology used
 
-2. Install dependencies
-```bash
-yarn install
-```
+## Hackathon tracks
 
-3. Start the local hardhat chain
-```bash
-yarn chain
-```
+### Meta Award
 
-4. On a second terminal, deploy the contracts
-```bash
-yarn deploy
-```
+We created this as an opensource solution for hackathon bounty distribution.
 
-5. Start the frontend
-```bash
-yarn start
-```
+### Best Social Impact OR Best User Experience
 
-Visit your app on http://localhost:3000/
+Our dApp improves ...
 
-### Resources
+## Next steps
 
-🎥 [Watch the BG & Zupass team first zoom meeting here](https://youtu.be/kwACdt3gRms)
-🎥 [Watch the BG & Zupass team second zoom meeting here](https://www.youtube.com/watch?v=yY7XdaCjC7I)
+Due to the limited time, we could not complete everything we set out to do. Additional features that we plan to add include:
 
-Some links mentioned in the video
+- Cross-chain fund distribution
+-
 
-https://github.com/proofcarryingdata/zupass
+## Links
 
-part1)
-https://github.com/proofcarryingdata/zupass/blob/main/apps/passport-server/src/services/telegramService.ts#L1104
+- [Vercel]()
+- [Presentation slides](https://docs.google.com/presentation/d/1Ve6jAdFijR18LzaWVAjBa3N_5VS2jSHFuacSU-f5MTE/edit?usp=sharing)
+- [GitHub]()
 
-part2)
-https://github.com/proofcarryingdata/zupass/blob/main/apps/passport-server/src/services/telegramService.ts#L554
+### Verified smart contracts
 
-part3)
-https://github.com/proofcarryingdata/zupass/blob/main/apps/passport-server/src/services/telegramService.ts#L736
+- [contract name]()
 
-https://github.com/odyslam/zuzalu-oracle/blob/master/src/ZuzaluOracle.sol
-https://api.zupass.org/issue/known-ticket-types
-https://github.com/iden3/snarkjs
-https://github.com/cedoor/zuauth
-https://github.com/cedoor/zuauth/tree/main#-tutorial
-https://www.npmjs.com/package/@pcd/passport-interface
-https://www.npmjs.com/package/@pcd/zk-eddsa-event-ticket-pcd
-https://www.npmjs.com/package/@pcd/eddsa-ticket-pcd
-https://www.npmjs.com/package/@pcd/semaphore-identity-pcd
-https://www.npmjs.com/package/@pcd/eddsa-ticket-pcd
+## Team
 
+This project was build during ETHBERLIN04 by:
+
+- [arjanjohan](https://x.com/arjanjohan/)
+- [name](https://x.com/)
+- [name](https://x.com/)
+- [name](https://x.com/)
