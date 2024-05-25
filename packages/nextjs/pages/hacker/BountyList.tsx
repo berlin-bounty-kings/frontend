@@ -30,14 +30,14 @@ const shortenAddress = (address: string) => `${address.slice(0, 6)}...${address.
 
 export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress }) => {
   const [bounties, setBounties] = useState<Bounty[]>([]);
-  const [proofs, setProofs] = useState<Record<number, ProofArgs>>({});
+  const [proofs, setProofs] = useState<Record<number, string>>({});
   const { address: connectedAddressFromAccount } = useAccount();
   const connectedAddressToUse = connectedAddress || connectedAddressFromAccount;
 
   const { writeAsync: claimBounty, isLoading: isMintingNFT } = useScaffoldContractWrite({
     contractName: "SBFModule",
     functionName: "claimBounty",
-    args: [undefined], // initially empty, we will fill this in the function call
+    args: [], // initially empty, we will fill this in the function call
   });
 
   useEffect(() => {
@@ -80,13 +80,8 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
       });
       if (result.type === "pcd") {
         const pcdData = JSON.parse(result.pcdStr).pcd;
-        const proof: ProofArgs = {
-          _pA: pcdData._pA,
-          _pB: pcdData._pB,
-          _pC: pcdData._pC,
-          _pubSignals: pcdData._pubSignals,
-        };
-        setProofs(prev => ({ ...prev, [index]: proof }));
+
+        setProofs(prev => ({ ...prev, [index]: pcdData }));
       } else {
         notification.error("Failed to parse PCD");
       }
@@ -96,6 +91,7 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
 
   const handleClaim = async (index: number) => {
     const proof = proofs[index];
+    console.log(proofs);
     if (!proof) {
       notification.error("Please generate proof first.");
       return;
