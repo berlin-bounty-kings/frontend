@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { zuAuthPopup } from "@pcd/zuauth";
+import { useAccount } from "wagmi";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { generateWitness } from "~~/utils/scaffold-eth/pcd";
@@ -7,10 +8,9 @@ import { HACKER_WINNER_ZUAUTH_CONFIG } from "~~/utils/zupassConstants";
 
 interface Bounty {
   name: string;
-  description: string;
   value: string;
-  winner: string;
-  sponsor: string;
+  id: number;
+  sponsorAddress: string;
   isClaimed: boolean;
 }
 
@@ -19,15 +19,25 @@ interface BountyListProps {
   connectedAddress: string | undefined;
 }
 
+interface ProofArgs {
+  _pA: [string, string];
+  _pB: [[string, string], [string, string]];
+  _pC: [string, string];
+  _pubSignals: string[];
+}
+
 const shortenAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`;
 
 export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress }) => {
   const [bounties, setBounties] = useState<Bounty[]>([]);
-  const [proofs, setProofs] = useState<Record<number, string>>({});
+  const [proofs, setProofs] = useState<Record<number, ProofArgs>>({});
+  const { address: connectedAddressFromAccount } = useAccount();
+  const connectedAddressToUse = connectedAddress || connectedAddressFromAccount;
+
   const { writeAsync: claimBounty, isLoading: isMintingNFT } = useScaffoldContractWrite({
     contractName: "SBFModule",
     functionName: "claimBounty",
-    args: ["0"], // assuming "0" is the bounty id, replace it as needed
+    args: [undefined], // initially empty, we will fill this in the function call
   });
 
   useEffect(() => {
@@ -35,18 +45,16 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
       const fetchedBounties: Bounty[] = [
         {
           name: "Bug Fix",
-          description: "Fix a critical bug",
           value: "1 ETH",
-          winner: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
-          sponsor: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
+          id: 0,
+          sponsorAddress: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
           isClaimed: false,
         },
         {
           name: "Feature Development",
-          description: "Develop a new feature",
           value: "2 ETH",
-          winner: "",
-          sponsor: "0xDEF...",
+          id: 1,
+          sponsorAddress: "0xDEF...",
           isClaimed: false,
         },
       ];
@@ -55,26 +63,36 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
     fetchBounties();
   }, [filter]);
 
-  const getProof = async (index: number, config: any, contractAddress: string) => {
-    if (!connectedAddress) {
-      notification.error("Please connect wallet");
-      return;
-    }
-    const result = await zuAuthPopup({
-      fieldsToReveal: {
-        revealAttendeeEmail: true,
-        revealEventId: true,
-        revealProductId: true,
-      },
-      watermark: connectedAddress,
-      config,
-    });
-    if (result.type === "pcd") {
-      setProofs(JSON.parse(result.pcdStr).pcd);
-    } else {
-      notification.error("Failed to parse PCD");
-    }
-  };
+  const getProof = useCallback(
+    async (index: number, config: any) => {
+      if (!connectedAddressToUse) {
+        notification.error("Please connect wallet");
+        return;
+      }
+      const result = await zuAuthPopup({
+        fieldsToReveal: {
+          revealAttendeeEmail: true,
+          revealEventId: true,
+          revealProductId: true,
+        },
+        watermark: connectedAddressToUse,
+        config,
+      });
+      if (result.type === "pcd") {
+        const pcdData = JSON.parse(result.pcdStr).pcd;
+        const proof: ProofArgs = {
+          _pA: pcdData._pA,
+          _pB: pcdData._pB,
+          _pC: pcdData._pC,
+          _pubSignals: pcdData._pubSignals,
+        };
+        setProofs(prev => ({ ...prev, [index]: proof }));
+      } else {
+        notification.error("Failed to parse PCD");
+      }
+    },
+    [connectedAddressToUse],
+  );
 
   const handleClaim = async (index: number) => {
     const proof = proofs[index];
@@ -84,8 +102,7 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
     }
     try {
       await claimBounty({
-        // args: [proof ? generateWitness(JSON.parse(proof)) : undefined], // assuming "0" is the bounty id, replace it as needed
-        args: ["0"],
+        args: [proof],
       });
       notification.success(`Bounty ${index} claimed`);
     } catch (error) {
@@ -114,7 +131,7 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
             <div className="flex-1">
               <h3 className="text-xl font-bold">{bounty.name}</h3>
               <p className="text-sm mb-2">Value: {bounty.value}</p>
-              <p className="text-sm">Sponsor: {shortenAddress(bounty.sponsor)}</p>
+              <p className="text-sm">Sponsor: {shortenAddress(bounty.sponsorAddress)}</p>
             </div>
             <div className="flex gap-2 mt-4 sm:mt-0">
               <button

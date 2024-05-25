@@ -112,12 +112,6 @@ const Home: NextPage = () => {
     args: [pcd ? generateWitness(JSON.parse(pcd)) : undefined],
   });
 
-  const { data: yourBalance } = useScaffoldContractRead({
-    contractName: "YourCollectible",
-    functionName: "balanceOf",
-    args: [connectedAddress],
-  });
-
   return (
     <>
       <MetaHeader />
