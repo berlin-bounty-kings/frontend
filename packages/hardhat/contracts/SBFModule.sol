@@ -2,6 +2,7 @@
 pragma solidity 0.8.19;
 
 /* Gnosis Safe Interfaces */
+// import {ISafe} from "@gnosis/contracts/interfaces/ISafe.sol";
 
 /* OpenZeppelin Contracts */
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
@@ -30,6 +31,9 @@ contract SBFModule is AccessControl {
 	//    \__ \/ __/ __ `/ __/ _ \/ ___/
 	//   ___/ / /_/ /_/ / /_/  __(__  )
 	//  /____/\__/\__,_/\__/\___/____/
+
+	/// @dev Safe instance
+	// ISafe safe;
 
 	/// @dev Token instance
 	IERC20 token;
@@ -80,8 +84,7 @@ contract SBFModule is AccessControl {
 		address _safeAddress
 	) external onlyRole(DEFAULT_ADMIN_ROLE) {
 		// Make sure that safe address is contract
-		if (!_isContract(_safeAddress)) revert SBFErrors.ADDRESS_NOT_CONTRACT();
-
+		// if (!_isContract(_safeAddress)) revert SBFErrors.ADDRESS_NOT_CONTRACT();
 		// Create safe instance
 		// safe = ISafe(_safeAddress);
 	}
@@ -102,17 +105,17 @@ contract SBFModule is AccessControl {
 		if (bountyInfoOf[_bountyId].amount != 0)
 			revert SBFErrors.BOUNTY_ALREADY_EXISTS();
 
-		// // Fetch balance before
-		// uint256 balanceBefore = token.balanceOf(address(safe));
+		// Fetch balance before
+		uint256 balanceBefore = token.balanceOf(address(this));
 
-		// // Do the transaction into the safe
-		// token.safeTransferFrom(msg.sender, address(safe), _amount);
+		// Do the transaction into the safe
+		token.safeTransferFrom(msg.sender, address(this), _amount);
 
-		// // Fetch balance after
-		// uint256 balanceAfter = token.balanceOf(address(safe));
+		// Fetch balance after
+		uint256 balanceAfter = token.balanceOf(address(this));
 
 		// Calculate the realized amount recieved
-		uint256 realizedAmount = 0;
+		uint256 realizedAmount = balanceAfter - balanceBefore;
 
 		// create the bounty entry
 		bountyInfoOf[_bountyId] = SBFDataTypes.Bounty(
@@ -167,12 +170,6 @@ contract SBFModule is AccessControl {
 	function _isContract(
 		address _address
 	) internal view returns (bool _isAddressContract) {
-		uint256 size;
-
-		assembly {
-			size := extcodesize(_address)
-		}
-
-		_isAddressContract = size > 0;
+		true;
 	}
 }

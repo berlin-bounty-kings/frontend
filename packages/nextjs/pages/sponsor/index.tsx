@@ -33,28 +33,28 @@ const SponsorDashboard: NextPage = () => {
     setNewBounty({ ...newBounty, [name]: value });
   };
 
-  const addBounty = async () => {
-    // Placeholder for adding a new bounty to the blockchain
-    if (!connectedAddress) {
-      notification.error("Please connect wallet");
-      return;
-    }
+  // const addBounty = async () => {
+  //   // Placeholder for adding a new bounty to the blockchain
+  //   if (!connectedAddress) {
+  //     notification.error("Please connect wallet");
+  //     return;
+  //   }
 
-    const newBountyEntry: Bounty = {
-      name: newBounty.name,
-      description: newBounty.description,
-      value: newBounty.value,
-      winner: "",
-      sponsor: connectedAddress,
-      isClaimed: false,
-    };
+  //   const newBountyEntry: Bounty = {
+  //     name: newBounty.name,
+  //     description: newBounty.description,
+  //     value: newBounty.value,
+  //     winner: "",
+  //     sponsor: connectedAddress,
+  //     isClaimed: false,
+  //   };
 
-    setBounties([...bounties, newBountyEntry]);
-    setNewBounty({ name: "", description: "", value: "", winner: "", sponsor: "", isClaimed: false });
-    notification.success("Bounty added successfully!");
-  };
+  //   setBounties([...bounties, newBountyEntry]);
+  //   setNewBounty({ name: "", description: "", value: "", winner: "", sponsor: "", isClaimed: false });
+  //   notification.success("Bounty added successfully!");
+  // };
 
-  const { writeAsync: mintNFT, isLoading: isMintingNFT } = useScaffoldContractWrite({
+  const { writeAsync: addBounty, isLoading: isMintingNFT } = useScaffoldContractWrite({
     contractName: "SBFModule",
     functionName: "depositBounty",
     args: [
@@ -94,7 +94,17 @@ const SponsorDashboard: NextPage = () => {
                 onChange={handleInputChange}
                 className="input input-bordered w-full"
               />
-              <button className="btn btn-primary w-full" onClick={addBounty}>
+              <button
+                className="btn btn-primary w-full"
+                onClick={async () => {
+                  try {
+                    await addBounty();
+                  } catch (e) {
+                    notification.error(`Error: ${e}`);
+                    return;
+                  }
+                }}
+              >
                 Add Bounty
               </button>
             </div>
