@@ -14,8 +14,14 @@ contract YourCollectible is ERC721, Groth16Verifier {
 	// ----------------------
 
 	// This us the ETHBerlin event UUID converted to bigint
-	uint256[1] VALID_EVENT_IDS = [
-		111560146890584288369567824893314450802
+	uint256[1] VALID_EVENT_IDS = [111560146890584288369567824893314450802];
+
+	// Assumption that there is only one event ID for each category and only 1 winner.
+	uint256[1] SOCIAL_WINNER_EVENT_ID = [
+		120712479341476572660709084948370727286
+	];
+	uint256[1] HACKER_WINNER_EVENT_ID = [
+		213102656137810142630059403125621749981
 	];
 
 	// This is hex to bigint conversion for ETHBerlin signer
@@ -67,10 +73,23 @@ contract YourCollectible is ERC721, Groth16Verifier {
 		_;
 	}
 
+	modifier validEventIdsForWinners(uint256[38] memory _pubSignals) {
+		uint256[] memory eventIds = getValidEventIdFromPublicSignals(
+			_pubSignals
+		);
+		require(
+			keccak256(abi.encodePacked(eventIds)) ==
+				keccak256(abi.encodePacked(VALID_EVENT_IDS)),
+			"Invalid event ids"
+		);
+		_;
+	}
+
 	modifier validSigner(uint256[38] memory _pubSignals) {
 		uint256[2] memory signer = getSignerFromPublicSignals(_pubSignals);
 		require(
-			signer[0] == ETHBERLIN_SIGNER[0] && signer[1] == ETHBERLIN_SIGNER[1],
+			signer[0] == ETHBERLIN_SIGNER[0] &&
+				signer[1] == ETHBERLIN_SIGNER[1],
 			"Invalid signer"
 		);
 		_;
@@ -128,8 +147,8 @@ contract YourCollectible is ERC721, Groth16Verifier {
 		uint256[38] memory _pubSignals
 	) public view returns (uint256[] memory) {
 		// Events are stored from starting index 15 to till valid event ids length
-		uint256[] memory eventIds = new uint256[](VALID_EVENT_IDS.length);
-		for (uint256 i = 0; i < VALID_EVENT_IDS.length; i++) {
+		uint256[] memory eventIds = new uint256[](1);
+		for (uint256 i = 0; i < 1; i++) {
 			eventIds[i] = _pubSignals[15 + i];
 		}
 		return eventIds;

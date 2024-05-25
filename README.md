@@ -40,7 +40,7 @@ Our dApp improves ...
 Due to the limited time, we could not complete everything we set out to do. Additional features that we plan to add include:
 
 - Cross-chain fund distribution
--
+- Distrbute funds between team members (partial claims)
 
 ## Links
 
