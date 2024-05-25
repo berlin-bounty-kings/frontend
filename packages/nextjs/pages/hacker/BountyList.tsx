@@ -34,10 +34,11 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
   const { address: connectedAddressFromAccount } = useAccount();
   const connectedAddressToUse = connectedAddress || connectedAddressFromAccount;
 
-  const { writeAsync: claimBounty, isLoading: isMintingNFT } = useScaffoldContractWrite({
+  const { writeAsync: claimBounty } = useScaffoldContractWrite({
     contractName: "SBFModule",
     functionName: "claimBounty",
-    args: [], // initially empty, we will fill this in the function call
+    args: [],
+    // args: [proof ? generateWitness(JSON.parse(proof)) : undefined], // initially empty, we will fill this in the function call
   });
 
   useEffect(() => {
@@ -91,14 +92,15 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
 
   const handleClaim = async (index: number) => {
     const proof = proofs[index];
-    console.log(proofs);
+    console.log(proof);
     if (!proof) {
       notification.error("Please generate proof first.");
       return;
     }
     try {
+      console.log("claiming");
       await claimBounty({
-        args: [proof],
+        args: [proof ? generateWitness(JSON.parse(proof)) : undefined],
       });
       notification.success(`Bounty ${index} claimed`);
     } catch (error) {
