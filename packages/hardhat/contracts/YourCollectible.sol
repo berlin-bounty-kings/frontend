@@ -14,9 +14,7 @@ contract YourCollectible is ERC721, Groth16Verifier {
 	// ----------------------
 
 	// This us the ETHBerlin event UUID converted to bigint
-	uint256[1] VALID_EVENT_IDS = [
-		111560146890584288369567824893314450802
-	];
+	uint256[1] VALID_EVENT_IDS = [111560146890584288369567824893314450802];
 
 	// This is hex to bigint conversion for ETHBerlin signer
 	uint256[2] ETHBERLIN_SIGNER = [
@@ -70,7 +68,8 @@ contract YourCollectible is ERC721, Groth16Verifier {
 	modifier validSigner(uint256[38] memory _pubSignals) {
 		uint256[2] memory signer = getSignerFromPublicSignals(_pubSignals);
 		require(
-			signer[0] == ETHBERLIN_SIGNER[0] && signer[1] == ETHBERLIN_SIGNER[1],
+			signer[0] == ETHBERLIN_SIGNER[0] &&
+				signer[1] == ETHBERLIN_SIGNER[1],
 			"Invalid signer"
 		);
 		_;
