@@ -73,6 +73,18 @@ contract YourCollectible is ERC721, Groth16Verifier {
 		_;
 	}
 
+	modifier validEventIdsForWinners(uint256[38] memory _pubSignals) {
+		uint256[] memory eventIds = getValidEventIdFromPublicSignals(
+			_pubSignals
+		);
+		require(
+			keccak256(abi.encodePacked(eventIds)) ==
+				keccak256(abi.encodePacked(VALID_EVENT_IDS)),
+			"Invalid event ids"
+		);
+		_;
+	}
+
 	modifier validSigner(uint256[38] memory _pubSignals) {
 		uint256[2] memory signer = getSignerFromPublicSignals(_pubSignals);
 		require(
