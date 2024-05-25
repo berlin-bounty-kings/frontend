@@ -4,7 +4,7 @@ import { useAccount } from "wagmi";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { generateWitness } from "~~/utils/scaffold-eth/pcd";
-import { HACKER_WINNER_ZUAUTH_CONFIG } from "~~/utils/zupassConstants";
+import { HACKER_WINNER_ZUAUTH_CONFIG, SOCIAL_WINNER_ZUAUTH_CONFIG } from "~~/utils/zupassConstants";
 
 interface Bounty {
   name: string;
@@ -12,6 +12,7 @@ interface Bounty {
   id: number;
   sponsorAddress: string;
   isClaimed: boolean;
+  config: any;
 }
 
 interface BountyListProps {
@@ -34,33 +35,32 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
   const { address: connectedAddressFromAccount } = useAccount();
   const connectedAddressToUse = connectedAddress || connectedAddressFromAccount;
 
-  const { writeAsync: claimBounty, isLoading: isMintingNFT } = useScaffoldContractWrite({
+  const { writeAsync: claimBounty } = useScaffoldContractWrite({
     contractName: "SBFModule",
     functionName: "claimBounty",
-    args: [], // initially empty, we will fill this in the function call
+    args: [],
   });
 
   useEffect(() => {
-    async function fetchBounties() {
-      const fetchedBounties: Bounty[] = [
-        {
-          name: "Bug Fix",
-          value: "1 ETH",
-          id: 0,
-          sponsorAddress: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
-          isClaimed: false,
-        },
-        {
-          name: "Feature Development",
-          value: "2 ETH",
-          id: 1,
-          sponsorAddress: "0xDEF...",
-          isClaimed: false,
-        },
-      ];
-      setBounties(fetchedBounties.filter(filter));
-    }
-    fetchBounties();
+    const initialBounties: Bounty[] = [
+      {
+        name: "Social Technologies",
+        value: "7,000 DAI",
+        id: 0,
+        sponsorAddress: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
+        isClaimed: false,
+        config: SOCIAL_WINNER_ZUAUTH_CONFIG,
+      },
+      {
+        name: "Hackers' Choice Award",
+        value: "7,000 DAI",
+        id: 1,
+        sponsorAddress: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
+        isClaimed: false,
+        config: HACKER_WINNER_ZUAUTH_CONFIG,
+      },
+    ];
+    setBounties(initialBounties.filter(filter));
   }, [filter]);
 
   const getProof = useCallback(
@@ -91,14 +91,13 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
 
   const handleClaim = async (index: number) => {
     const proof = proofs[index];
-    console.log(proofs);
     if (!proof) {
       notification.error("Please generate proof first.");
       return;
     }
     try {
       await claimBounty({
-        args: [proof],
+        args: [proof ? generateWitness(JSON.parse(proof)) : undefined],
       });
       notification.success(`Bounty ${index} claimed`);
     } catch (error) {
@@ -126,14 +125,11 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <div className="flex-1">
               <h3 className="text-xl font-bold">{bounty.name}</h3>
-              <p className="text-sm mb-2">Value: {bounty.value}</p>
-              <p className="text-sm">Sponsor: {shortenAddress(bounty.sponsorAddress)}</p>
+              <p className="text-med mb-2">{bounty.value}</p>
+              {/* <p className="text-sm">Sponsor: {shortenAddress(bounty.sponsorAddress)}</p> */}
             </div>
             <div className="flex gap-2 mt-4 sm:mt-0">
-              <button
-                className="btn btn-primary"
-                onClick={() => handleButtonClick(index, HACKER_WINNER_ZUAUTH_CONFIG)} // Change config as needed
-              >
+              <button className="btn btn-primary" onClick={() => handleButtonClick(index, bounty.config)}>
                 {!proofs[index] ? "Generate Proof" : "Claim"}
               </button>
             </div>
