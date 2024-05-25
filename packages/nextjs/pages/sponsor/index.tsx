@@ -12,7 +12,7 @@ const SponsorDashboard: NextPage = () => {
   const [bounties, setBounties] = useState<Bounty[]>([]);
 
   const [newBounty, setNewBounty] = useState<Bounty>({
-    name: "",
+    id: "",
     description: "",
     value: "",
     winner: "",
@@ -33,32 +33,11 @@ const SponsorDashboard: NextPage = () => {
     setNewBounty({ ...newBounty, [name]: value });
   };
 
-  // const addBounty = async () => {
-  //   // Placeholder for adding a new bounty to the blockchain
-  //   if (!connectedAddress) {
-  //     notification.error("Please connect wallet");
-  //     return;
-  //   }
-
-  //   const newBountyEntry: Bounty = {
-  //     name: newBounty.name,
-  //     description: newBounty.description,
-  //     value: newBounty.value,
-  //     winner: "",
-  //     sponsor: connectedAddress,
-  //     isClaimed: false,
-  //   };
-
-  //   setBounties([...bounties, newBountyEntry]);
-  //   setNewBounty({ name: "", description: "", value: "", winner: "", sponsor: "", isClaimed: false });
-  //   notification.success("Bounty added successfully!");
-  // };
-
   const { writeAsync: addBounty, isLoading: isMintingNFT } = useScaffoldContractWrite({
     contractName: "SBFModule",
     functionName: "depositBounty",
     args: [
-      newBounty.name,
+      newBounty.id,
       BigInt(newBounty.value), // TODO: Convert the value to wei
     ],
   });
@@ -73,9 +52,9 @@ const SponsorDashboard: NextPage = () => {
             <div className="flex flex-col gap-4">
               <input
                 type="text"
-                placeholder="Name"
-                name="name"
-                value={newBounty.name}
+                placeholder="Bounty ID"
+                name="id"
+                value={newBounty.id}
                 onChange={handleInputChange}
                 className="input input-bordered w-full"
               />
