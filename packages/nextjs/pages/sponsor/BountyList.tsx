@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { notification } from "~~/utils/scaffold-eth";
 
-interface Bounty {
+export interface Bounty {
   name: string;
   description: string;
   value: string;
