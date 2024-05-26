@@ -49,6 +49,7 @@ Due to the limited time, we could not complete everything we set out to do. Addi
 
 ## Links
 
+- [Vercel deployment](https://bounty-kings.vercel.app/)
 - [Presentation slides](https://docs.google.com/presentation/d/1Ve6jAdFijR18LzaWVAjBa3N_5VS2jSHFuacSU-f5MTE/edit?usp=sharing)
 - [Demo video](https://www.loom.com/share/a032dbc1beae416ab2dbd48c27d0710b?sid=b02ad7b2-c82e-49bd-8283-edc159672fa0)
 - [Github Smart contracts repo](https://github.com/berlin-bounty-kings/contracts)
