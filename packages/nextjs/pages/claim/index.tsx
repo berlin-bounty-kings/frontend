@@ -1,4 +1,4 @@
-import { HackerBountyList } from "./BountyList";
+import HackerBountyList from "./component/BountyList";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";

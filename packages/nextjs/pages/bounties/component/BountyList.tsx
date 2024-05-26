@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react";
-import { notification } from "~~/utils/scaffold-eth";
 
 export interface Bounty {
   id: string;
@@ -13,9 +12,7 @@ interface BountyListProps {
   filter: (bounty: Bounty) => boolean;
 }
 
-const shortenAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`;
-
-export const SponsorBountyList: FC<BountyListProps> = ({ filter }) => {
+const SponsorBountyList: FC<BountyListProps> = ({ filter }) => {
   const [bounties, setBounties] = useState<Bounty[]>([]);
 
   useEffect(() => {
@@ -113,3 +110,5 @@ export const SponsorBountyList: FC<BountyListProps> = ({ filter }) => {
     </div>
   );
 };
+
+export default SponsorBountyList;

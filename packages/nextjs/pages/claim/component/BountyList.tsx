@@ -6,11 +6,11 @@ import { notification } from "~~/utils/scaffold-eth";
 import { generateWitness } from "~~/utils/scaffold-eth/pcd";
 import { HACKER_WINNER_ZUAUTH_CONFIG, SOCIAL_WINNER_ZUAUTH_CONFIG } from "~~/utils/zupassConstants";
 
-interface Bounty {
+export interface Bounty {
   name: string;
+  id: string;
   value: string;
-  id: number;
-  sponsorAddress: string;
+  sponsor: string;
   isClaimed: boolean;
   config: any;
 }
@@ -20,16 +20,9 @@ interface BountyListProps {
   connectedAddress: string | undefined;
 }
 
-interface ProofArgs {
-  _pA: [string, string];
-  _pB: [[string, string], [string, string]];
-  _pC: [string, string];
-  _pubSignals: string[];
-}
-
 const shortenAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`;
 
-export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress }) => {
+const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress }) => {
   const [bounties, setBounties] = useState<Bounty[]>([]);
   const [proofs, setProofs] = useState<Record<number, string>>({});
   const { address: connectedAddressFromAccount } = useAccount();
@@ -46,16 +39,16 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
       {
         name: "Social Technologies",
         value: "7,000 DAI",
-        id: 0,
-        sponsorAddress: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
+        id: "0",
+        sponsor: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
         isClaimed: false,
         config: SOCIAL_WINNER_ZUAUTH_CONFIG,
       },
       {
         name: "Hackers' Choice Award",
         value: "7,000 DAI",
-        id: 1,
-        sponsorAddress: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
+        id: "1",
+        sponsor: "0x199d51a2Be04C65f325908911430E6FF79a15ce3",
         isClaimed: false,
         config: HACKER_WINNER_ZUAUTH_CONFIG,
       },
@@ -97,7 +90,7 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
     }
     try {
       await claimBounty({
-        args: [proof ? generateWitness(JSON.parse(proof)) : undefined],
+        args: [generateWitness(JSON.parse(proof))],
       });
       notification.success(`Bounty ${index} claimed`);
     } catch (error) {
@@ -126,7 +119,7 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
             <div className="flex-1">
               <h3 className="text-xl font-bold">{bounty.name}</h3>
               <p className="text-med mb-2">{bounty.value}</p>
-              {/* <p className="text-sm">Sponsor: {shortenAddress(bounty.sponsorAddress)}</p> */}
+              <p className="text-sm">Sponsor: {shortenAddress(bounty.sponsor)}</p>
             </div>
             <div className="flex gap-2 mt-4 sm:mt-0">
               <button className="btn btn-primary" onClick={() => handleButtonClick(index, bounty.config)}>
@@ -139,3 +132,5 @@ export const HackerBountyList: FC<BountyListProps> = ({ filter, connectedAddress
     </div>
   );
 };
+
+export default HackerBountyList;

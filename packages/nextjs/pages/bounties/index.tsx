@@ -1,44 +1,34 @@
-import { ChangeEvent, useEffect, useState } from "react";
-import { Bounty, SponsorBountyList } from "./BountyList";
-import { BigNumber } from "ethers";
+import { ChangeEvent, useState } from "react";
+import SponsorBountyList from "./component/BountyList";
+import { Bounty } from "./component/BountyList";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { MetaHeader } from "~~/components/MetaHeader";
-import { useScaffoldContractRead, useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
+import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
 const SponsorDashboard: NextPage = () => {
   const { address: connectedAddress } = useAccount();
-  const [bounties, setBounties] = useState<Bounty[]>([]);
 
   const [newBounty, setNewBounty] = useState<Bounty>({
     id: "",
     description: "",
     value: "",
-    winner: "",
     sponsor: "",
     isClaimed: false,
   });
-
-  const handleApprove = (index: number) => {
-    notification.success(`Bounty ${index} approved`);
-  };
-
-  const handleDispute = (index: number) => {
-    notification.error(`Bounty ${index} disputed`);
-  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewBounty({ ...newBounty, [name]: value });
   };
 
-  const { writeAsync: addBounty, isLoading: isMintingNFT } = useScaffoldContractWrite({
+  const { writeAsync: addBounty } = useScaffoldContractWrite({
     contractName: "SBFModule",
     functionName: "depositBounty",
     args: [
       newBounty.id,
-      BigInt(newBounty.value), // TODO: Convert the value to wei
+      BigInt(newBounty.value.replace(/,/g, "")), // Convert the value to bigint properly
     ],
   });
 
@@ -92,11 +82,7 @@ const SponsorDashboard: NextPage = () => {
         <div className="card w-full max-w-4xl bg-base-100 shadow-xl mt-8">
           <div className="card-body">
             <h2 className="card-title text-center">Bounties Overview</h2>
-            <SponsorBountyList
-              filter={bounty => bounty.sponsor.toLowerCase() === connectedAddress?.toLowerCase()}
-              onApproveClick={handleApprove}
-              onDisputeClick={handleDispute}
-            />
+            <SponsorBountyList filter={bounty => bounty.sponsor.toLowerCase() === connectedAddress?.toLowerCase()} />
           </div>
         </div>
       </div>

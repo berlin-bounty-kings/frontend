@@ -1,14 +1,13 @@
 import { useEffect } from "react";
 import { useDarkMode, useIsMounted } from "usehooks-ts";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
 export const SwitchTheme = ({ className }: { className?: string }) => {
-  const { isDarkMode, toggle } = useDarkMode();
-  const isMounted = useIsMounted();
+  const { isDarkMode } = useDarkMode();
+  useIsMounted();
 
   useEffect(() => {
     const body = document.body;
-    body.setAttribute("data-theme", isDarkMode ?  "scaffoldEth" : "scaffoldEthDark");
+    body.setAttribute("data-theme", isDarkMode ? "scaffoldEth" : "scaffoldEthDark");
   }, [isDarkMode]);
 
   return (
