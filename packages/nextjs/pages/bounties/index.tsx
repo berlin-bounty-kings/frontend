@@ -91,7 +91,7 @@ const SponsorDashboard: NextPage = () => {
         </div>
         <div className="card w-full max-w-4xl bg-base-100 shadow-xl mt-8">
           <div className="card-body">
-            <h2 className="card-title text-center">Sponsor Dashboard</h2>
+            <h2 className="card-title text-center">Bounties Overview</h2>
             <SponsorBountyList
               filter={bounty => bounty.sponsor.toLowerCase() === connectedAddress?.toLowerCase()}
               onApproveClick={handleApprove}

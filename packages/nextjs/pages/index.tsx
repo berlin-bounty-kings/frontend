@@ -4,7 +4,10 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { CreditCardIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
+import Team from "~~/components/Team";
 import { Address } from "~~/components/scaffold-eth";
+
+// Import the Team component
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -22,7 +25,7 @@ const Home: NextPage = () => {
             <Address address={connectedAddress} />
           </div>
           <p>
-            <img src="/logo/android-chrome-512x512.png" />
+            <img src="/logo/android-chrome-512x512.png" alt="Logo" />
           </p>
         </div>
 
@@ -33,7 +36,7 @@ const Home: NextPage = () => {
               <p>
                 Sponsors and organizers can add bounties on the{" "}
                 <Link href="/create" passHref className="link">
-                  Sponsor dashboard
+                  Bounties dashboard
                 </Link>
                 .
               </p>
@@ -43,13 +46,16 @@ const Home: NextPage = () => {
               <p>
                 Winners can claim their bounties on the{" "}
                 <Link href="/results" passHref className="link">
-                  Hacker dashboard
+                  Claim dashboard
                 </Link>
                 .
               </p>
             </div>
           </div>
         </div>
+
+        {/* Add the Team component here */}
+        <Team />
       </div>
     </>
   );
