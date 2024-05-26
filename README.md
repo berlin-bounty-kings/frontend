@@ -23,7 +23,7 @@
 
 ## Technology used
 
-⚙️ Built using [Zupass](https://zupass.org), [Scaffold-ETH 2](https://scaffoldeth.io/) Solidity, NextJS, Foundry, Wagmi, Viem, and Typescript.
+⚙️ Built using [Zupass](https://zupass.org), [Scaffold-ETH 2](https://scaffoldeth.io/), Solidity, NextJS, Foundry, Wagmi, Viem, and Typescript.
 
 ## Hackathon tracks
 
