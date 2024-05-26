@@ -19,7 +19,11 @@
 
 ## The problem SBF solves
 
+😎 SBF removes all the hassle from hackathon prize management for both sponsors and hackers using the magic of zero-knowledge proofs. Sponsors can effortlessly post bounties and deposit prize money, while hackers can instantly and securely claim their winnings. Say goodbye to chasing sponsors on Discord for months—our solution ensures an efficient, seamless experience for everyone involved.
+
 ## Challenges you ran into
+
+🧑‍💻 We found working with the cool tech at [Zupass](https://zupass.org) fun, new and exciting. Our team closely collaborated to understand the zk proofs and how to apply them. We want to give a special thank you to Richard and the Zupass team for helping us with explanation, guidance on code examples and helping us set up a test dev environment with your tech, you guys are amazing.
 
 ## Technology used
 
