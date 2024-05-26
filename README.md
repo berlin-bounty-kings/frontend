@@ -33,11 +33,11 @@
 
 ### Meta Award
 
-We created this as an opensource solution for hackathon bounty distribution.
+🖥️ We developed this open-source solution for hackathon bounty distribution based on our experiences as seasoned hackathon participants. This tool could have saved us significant time, money, and frustration in the past, which is why we were driven to create it.
 
-### Best Social Impact OR Best User Experience
+### Best User Experience
 
-Our dApp improves ...
+💅 Removing the hassle includes making the user experience smooth. We aimed to enhance the hackathon experience in all aspects, which is why we put effort into creating a sleek and easy-to-use UX for both sponsors and hackers.
 
 ## Next steps
 
@@ -45,6 +45,7 @@ Due to the limited time, we could not complete everything we set out to do. Addi
 
 - Cross-chain fund distribution
 - Distrbute funds between team members (partial claims)
+- Keeping the funds and the smartcontract logic secured as a gnosis safe module
 
 ## Links
 
