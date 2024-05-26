@@ -14,7 +14,7 @@ type MetaHeaderProps = {
 const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/` : "/";
 
 export const MetaHeader = ({
-  title = "SECURE BOUNTY FUND",
+  title = "SAFE BOUNTY FUND",
   description = "Built with ❤️ at ETHBerlin04",
   image = "thumbnail.jpg",
   twitterCard = "summary_large_image",

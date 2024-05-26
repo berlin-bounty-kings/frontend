@@ -11,28 +11,22 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="flex items-center flex-col flex-grow pt-10">
+      <div className="sbfw flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
           <h1 className="text-center">
             <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">SECURE BOUNTY FUND</span>
+            <span className="block text-4xl font-bold">SAFE BOUNTY FUND</span>
           </h1>
           <div className="flex justify-center items-center space-x-2">
             <p className="my-2 font-medium">Connected Address:</p>
             <Address address={connectedAddress} />
           </div>
           <p>
-            <img
-              src="/logo/android-chrome-512x512.png"
-              // alt={fighters[0].name}
-              // style={{ height: "200px" }}
-            />
+            <img src="/logo/android-chrome-512x512.png" />
           </p>
-          <br></br>
-          <p className="text-center text-lg">text!</p>
         </div>
 
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
+        <div className="sbfc flex-grow bg-base-300 w-full mt-16 px-8 py-12">
           <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
               <CurrencyDollarIcon className="h-8 w-8 fill-secondary" />

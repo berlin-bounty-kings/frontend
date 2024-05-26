@@ -13,17 +13,17 @@ interface HeaderMenuLink {
 }
 
 export const menuLinks: HeaderMenuLink[] = [
-  // {
-  //   label: "Home",
-  //   href: "/",
-  // },
   {
-    label: "Sponsor dashboard",
-    href: "/sponsor",
+    label: "Home",
+    href: "/",
   },
   {
-    label: "Hacker dashboard",
-    href: "/hacker",
+    label: "Bounties",
+    href: "/bounties",
+  },
+  {
+    label: "Claim",
+    href: "/claim",
   },
   {
     label: "Team",

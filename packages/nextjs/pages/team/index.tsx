@@ -11,7 +11,7 @@ const teamMembers = [
     twitter: "https://twitter.com/arjanjohan",
   },
   {
-    name: "@0xjsi.eth",
+    name: "0xjsi.eth",
     image: "/pfp/0xjsi.jpg",
     description: "hacker",
     github: "https://github.com/jacksmithinsulander",
